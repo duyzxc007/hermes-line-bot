@@ -284,4 +284,22 @@ def handle_location_message(event):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import sys
+    import subprocess
+    import os
+    import multiprocessing
+
+    multiprocessing.freeze_support()
+    
+    if getattr(sys, 'frozen', False):
+        print("Starting Ngrok Tunnel...")
+        ngrok_path = os.path.join(sys._MEIPASS, "ngrok.exe") if hasattr(sys, '_MEIPASS') else "ngrok.exe"
+        try:
+            subprocess.Popen([ngrok_path, "http", "--domain=ace-lioness-instantly.ngrok-free.app", "8000"], creationflags=0x00000010)
+        except Exception as e:
+            print(f"Failed to start ngrok: {e}")
+            
+        print("Starting FastAPI Backend...")
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+    else:
+        uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
