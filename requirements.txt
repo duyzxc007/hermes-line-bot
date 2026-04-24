@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+line-bot-sdk
+langchain
+langchain-community
+langchain-openai
+chromadb
+python-dotenv
+sentence-transformers
+langchain-huggingface
+apscheduler
+SQLAlchemy
+duckduckgo-search
+flask

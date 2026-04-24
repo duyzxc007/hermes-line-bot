@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Weather Syncer</title>
+    <!-- LINE LIFF SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #f5f5f5; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06C755; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <p style="color: #666; margin-top: 20px;">กำลังตรวจสอบพิกัด GPS...</p>
+    
+    <script>
+        // LIFF ID ต้องรับมาจาก URL Parameter หรือฮาร์ดโค้ด (แต่วิธีที่ดีที่สุดคือดึงจาก liff_id ในหน้าเว็บถ้าทำได้ แต่ LINE Developer จะให้เป็นลิงก์ liff.line.me มาให้เลย)
+        async function main() {
+            try {
+                // Initialize LIFF. Use the default liff.init() and LINE will provide the LIFF ID inherently if opened via liff.line.me. 
+                // But LIFF v2 strongly requires the liffId to be explicitly passed!
+                // To solve this simply without Hardcoding in HTML, we will get the LIFF ID from a URL parameter if passed, OR force the user to place their LIFF ID here:
+                
+                // --- USER CONFIGURATION NEEDED ---
+                const myLiffId = "2009856348-ugbcBEfy"; // To be filled by user
+                
+                await liff.init({ liffId: myLiffId });
+                
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+
+                const profile = await liff.getProfile();
+                const userId = profile.userId;
+
+                // Request GPS Location
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        // Reverse Geocoding (Optional) OR just send "GPS Location" as address
+                        // Send data to our FastAPI Backend
+                        await fetch('/api/update_location', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                user_id: userId,
+                                lat: lat,
+                                lng: lng,
+                                address: "Live GPS (Auto Sync)"
+                            })
+                        });
+
+                        // Make user send message
+                        await liff.sendMessages([
+                            {
+                                type: 'text',
+                                text: 'อากาศวันนี้เป็นยังไง'
+                            }
+                        ]);
+
+                        // Close App
+                        liff.closeWindow();
+                    },
+                    (error) => {
+                        document.body.innerHTML = "<p>ไม่สามารถเข้าถึง GPS ได้ กรุณาอนุญาตสิทธิ์ Location ในมือถือ</p>";
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+
+            } catch (err) {
+                document.body.innerHTML = "<p>ตั้งค่า LIFF Error: " + err.message + "</p>";
+            }
+        }
+        
+        main();
+    </script>
+</body>
+</html>
