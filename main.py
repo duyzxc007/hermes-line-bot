@@ -74,7 +74,7 @@ def send_hermes_response(user_id, reply_token, prompt_text, is_audio_reply=False
         # Format string: FLEX_EXPENSE: amount|category|item
         parts = reply_text.replace("FLEX_EXPENSE:", "").split("|")
         if len(parts) >= 3:
-            from flex import get_expense_receipt_flex
+            from line_flex import get_expense_receipt_flex
             from datetime import datetime
             flex_msg = get_expense_receipt_flex(parts[0], parts[1], parts[2], datetime.now().strftime("%Y-%m-%d %H:%M"))
             line_bot_api.reply_message(reply_token, flex_msg)
@@ -124,7 +124,7 @@ def api_update_location(payload: LocationPayload):
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    from flex import create_welcome_checklist_flex
+    from line_flex import create_welcome_checklist_flex
     flex_msg = create_welcome_checklist_flex()
     line_bot_api.reply_message(event.reply_token, flex_msg)
 
@@ -136,7 +136,7 @@ def handle_text_message(event):
     # --- Interceptors for Rich Menu ---
     user_text = text.strip()
     if user_text == "เมนูช่วยเหลือ":
-        from flex import create_help_flex_message
+        from line_flex import create_help_flex_message
         flex_msg = create_help_flex_message()
         line_bot_api.reply_message(event.reply_token, flex_msg)
         return
@@ -172,7 +172,7 @@ def handle_text_message(event):
             
         conn.close()
         
-        from flex import get_expense_summary_flex
+        from line_flex import get_expense_summary_flex
         flex_msg = get_expense_summary_flex("เดือนนี้ (This Month)", f"{overall_total:,.2f}", breakdown)
         line_bot_api.reply_message(event.reply_token, flex_msg)
         return
