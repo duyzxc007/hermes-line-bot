@@ -9,10 +9,10 @@ python -m pip install pyinstaller
 
 echo.
 echo [2/3] Building the .exe file (This will take a LONG time)...
-:: ใช้ pyinstaller คอมไพล์โปรแกรม
-:: --onefile: รวมทุกอย่างเป็นไฟล์เดียว
-:: --add-data: ฝังไฟล์ ngrok.exe และโฟลเดอร์ static เข้าไปด้วย
-:: --hidden-import: บังคับดึงไลบรารีที่ชอบตกหล่น
+:: Use PyInstaller to compile
+:: --onefile: bundle everything into a single executable
+:: --add-data: embed ngrok.exe and static folder
+:: --hidden-import: force include missing libraries
 
 python -m PyInstaller --name "HermesBot" --onefile ^
   --add-data "ngrok.exe;." ^
@@ -28,10 +28,10 @@ python -m PyInstaller --name "HermesBot" --onefile ^
 echo.
 echo ===================================================
 echo [3/3] Build Complete!
-echo ไฟล์บอทของคุณคือ HermesBot.exe อยู่ในโฟลเดอร์ "dist"
+echo Your bot file is HermesBot.exe located in the "dist" folder.
 echo.
-echo ** สำคัญมาก: ก่อนนำไปรันที่เครื่องอื่น **
-echo ให้คัดลอกไฟล์ .env ไปวางไว้ที่โฟลเดอร์เดียวกับไฟล์ .exe ด้วยเสมอ
-echo มิฉะนั้นบอทจะไม่มีรหัสผ่านในการทำงาน
+echo ** VERY IMPORTANT: Before running on another computer **
+echo Please copy the .env file to the same folder as the .exe file.
+echo Otherwise, the bot will not have the required API keys.
 echo ===================================================
 pause

@@ -8,9 +8,9 @@ echo [1/3] Checking Python installation...
 python --version >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     echo.
-    echo [ERROR] ไม่พบโปรแกรม Python ในเครื่องนี้!
-    echo กรุณาดาวน์โหลดและติดตั้ง Python 3.10 หรือใหม่กว่า จาก https://www.python.org/downloads/
-    echo *** สำคัญมาก: ตอนติดตั้งหน้าแรกสุด ต้องติ๊กถูกที่ช่อง "Add Python to PATH" ด้วยนะครับ ***
+    echo [ERROR] Python is not found on this computer!
+    echo Please download and install Python 3.10 or newer from https://www.python.org/downloads/
+    echo *** IMPORTANT: Check the box "Add Python to PATH" during installation. ***
     echo.
     pause
     exit /b
@@ -23,11 +23,11 @@ python -m pip install -r requirements.txt
 
 echo.
 echo ===================================================
-echo   [SUCCESS] ติดตั้งไลบรารีเสร็จสมบูรณ์! 
+echo   [SUCCESS] Libraries installed successfully! 
 echo ===================================================
-echo [3/3] กำลังเปิดหน้าต่างสำหรับรัน Ngrok และ Bot...
+echo [3/3] Opening terminal windows for Ngrok and Bot...
 
-:: เปิดหน้าต่างแยกเพื่อไม่ให้ปิดตัวเอง
+:: Open separate windows to prevent auto-closing
 start "Ngrok Tunnel" cmd /k ".\ngrok.exe http --domain=ace-lioness-instantly.ngrok-free.app 8000"
 start "Hermes Bot" cmd /k "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
