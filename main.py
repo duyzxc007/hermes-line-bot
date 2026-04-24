@@ -5,9 +5,6 @@ from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 
-from keep_alive import keep_alive
-keep_alive() # เรียกใช้ก่อนรันบอท
-
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageMessage,
@@ -286,4 +283,5 @@ def handle_location_message(event):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 5000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)

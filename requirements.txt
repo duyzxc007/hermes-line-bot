@@ -11,4 +11,3 @@ langchain-huggingface
 apscheduler
 SQLAlchemy
 duckduckgo-search
-flask
