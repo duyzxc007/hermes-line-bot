@@ -3,9 +3,12 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from datetime import datetime
 import pytz
 
+import os
+
 # We use SQLAlchemyJobStore with SQLite to persist jobs even if the server restarts!
+DATA_DIR = os.environ.get("DATA_DIR", ".")
 jobstores = {
-    'default': SQLAlchemyJobStore(url='sqlite:///jobs.db')
+    'default': SQLAlchemyJobStore(url=f'sqlite:///{os.path.join(DATA_DIR, "jobs.db")}')
 }
 
 bkk_tz = pytz.timezone('Asia/Bangkok')

@@ -30,7 +30,8 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 BASE_URL = os.getenv("BASE_URL", "https://ace-lioness-instantly.ngrok-free.app")
 
 # Initialize Group Chat SQLite directly
-GROUP_DB = "groups.db"
+DATA_DIR = os.environ.get("DATA_DIR", ".")
+GROUP_DB = os.path.join(DATA_DIR, "groups.db")
 def init_group_db():
     conn = sqlite3.connect(GROUP_DB)
     c = conn.cursor()
@@ -142,7 +143,7 @@ def handle_text_message(event):
         
     elif user_text == "สรุปบัญชีให้หน่อย":
         from datetime import datetime
-        conn = sqlite3.connect("expenses.db")
+        conn = sqlite3.connect(os.path.join(os.environ.get("DATA_DIR", "."), "expenses.db"))
         c = conn.cursor()
         month_str = datetime.now().strftime("%Y-%m")
         

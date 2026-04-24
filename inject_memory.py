@@ -1,7 +1,10 @@
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
-DB_DIR = "./chroma_db"
+import os
+
+DATA_DIR = os.environ.get("DATA_DIR", ".")
+DB_DIR = os.path.join(DATA_DIR, "chroma_db")
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 vector_store = Chroma(embedding_function=embeddings, persist_directory=DB_DIR)
 

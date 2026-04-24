@@ -20,12 +20,13 @@ bkk_tz = pytz.timezone('Asia/Bangkok')
 current_user_id = contextvars.ContextVar("current_user_id", default="")
 
 # 2. Setup Vector Database (Chroma) for RAG Memory
-DB_DIR = "./chroma_db"
+DATA_DIR = os.environ.get("DATA_DIR", ".")
+DB_DIR = os.path.join(DATA_DIR, "chroma_db")
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 vector_store = Chroma(embedding_function=embeddings, persist_directory=DB_DIR)
 
 # 3. Setup SQLite Database for Expenses and User Profiles
-EXPENSE_DB = "expenses.db"
+EXPENSE_DB = os.path.join(DATA_DIR, "expenses.db")
 
 def init_db():
     conn = sqlite3.connect(EXPENSE_DB)

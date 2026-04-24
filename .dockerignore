@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.db
+*.sqlite3
+chroma_db/
+ngrok.exe
+ngrok.zip
+static/*.m4a
+static/*.wav
+static/*.mp3
